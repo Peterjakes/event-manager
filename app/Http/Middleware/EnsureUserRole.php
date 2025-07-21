@@ -13,8 +13,14 @@ class EnsureUserRole
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, $role): Response
     {
+
+         // Restrict route to users with a specific role
+    if (auth()->check() && auth()->user()->role !== $role) {
+        abort(403, 'Unauthorized');
+    }
+
         return $next($request);
     }
 }

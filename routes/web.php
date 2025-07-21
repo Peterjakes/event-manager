@@ -27,4 +27,25 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Redirect user to their appropriate dashboard after login
+Route::get('/redirect', function () {
+    return ''; // Middleware handles the redirect logic
+})->middleware(['auth', 'checkrole']);
+
+// Admin Dashboard (only accessible by admins)
+Route::get('/admin/dashboard', function () {
+    return 'Welcome Admin';
+})->middleware(['auth', 'ensurerole:admin'])->name('admin.dashboard');
+
+// Organizer Dashboard
+Route::get('/organizer/dashboard', function () {
+    return 'Welcome Organizer';
+})->middleware(['auth', 'ensurerole:organizer'])->name('organizer.dashboard');
+
+// Customer Dashboard
+Route::get('/customer/dashboard', function () {
+    return 'Welcome Customer';
+})->middleware(['auth', 'ensurerole:customer'])->name('customer.dashboard');
+
+
 require __DIR__.'/auth.php';

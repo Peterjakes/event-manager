@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,5 +48,10 @@ Route::get('/customer/dashboard', function () {
     return 'Welcome Customer';
 })->middleware(['auth', 'ensurerole:customer'])->name('customer.dashboard');
 
+
+//this route group protects all event routes so only logged-in organizers can access them.
+Route::middleware(['auth', 'role:organizer'])->group(function () {
+    Route::resource('events', EventController::class);
+});
 
 require __DIR__.'/auth.php';

@@ -47,12 +47,15 @@ class EventController extends Controller
     // Show form to edit existing event
     public function edit(Event $event)
     {
+        $this->authorizeEvent($event);
         return view('events.edit', compact('event'));
     }
 
     // Update event info
     public function update(Request $request, Event $event)
     {
+        $this->authorizeEvent($event);
+        
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required',
@@ -69,7 +72,16 @@ class EventController extends Controller
     // Delete event
     public function destroy(Event $event)
     {
+        $this->authorizeEvent($event);
         $event->delete();
         return redirect()->route('events.index')->with('success', 'Event deleted.');
+    }
+
+    // Ensure logged-in user is the owner of the event
+    private function authorizeEvent(Event $event)
+    {
+        if ($event->user_id !== Auth::id()) {
+            abort(403);
+        }
     }
 }

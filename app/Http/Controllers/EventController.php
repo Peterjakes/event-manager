@@ -12,13 +12,13 @@ class EventController extends Controller
     public function index()
     {
         $events = Event::where('user_id', Auth::id())->get();
-        return view('events.index', compact('events'));
+        return view('backend.events.index', compact('events'));
     }
 
     // Show event creation form
     public function create()
     {
-        return view('events.create');
+        return view('backend.events.create');
     }
 
     // Store new event in database
@@ -48,7 +48,7 @@ class EventController extends Controller
     public function edit(Event $event)
     {
         $this->authorizeEvent($event);
-        return view('events.edit', compact('event'));
+        return view('backend.events.edit', compact('event'));
     }
 
     // Update event info
